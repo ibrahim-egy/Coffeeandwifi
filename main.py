@@ -1,5 +1,5 @@
 from flask_sqlalchemy import SQLAlchemy
-from flask import Flask, render_template, redirect, url_for, request
+from flask import Flask, render_template, redirect, url_for
 from flask_bootstrap import Bootstrap
 from flask_wtf import FlaskForm
 from wtforms import StringField, SubmitField, SelectField, BooleanField
@@ -7,10 +7,10 @@ from wtforms.validators import DataRequired, URL
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+app.config['SECRET_KEY'] = '8BYkEfBA6O6donzWlSihBXox7C0sKR6b'
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///cafes.db'
 db = SQLAlchemy(app)
 
-app.config['SECRET_KEY'] = '8BYkEfBA6O6donzWlSihBXox7C0sKR6b'
 Bootstrap(app)
 
 
@@ -28,6 +28,8 @@ class Cafe(db.Model):
     seats = db.Column(db.String(250), nullable=False)
     coffee_price = db.Column(db.String(250), nullable=False)
 
+
+# db.create_all()
 
 class CafeForm(FlaskForm):
     name = StringField('Cafe name', validators=[DataRequired()])
