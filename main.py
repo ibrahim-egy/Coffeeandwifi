@@ -1,5 +1,5 @@
 from flask_sqlalchemy import SQLAlchemy
-from flask import Flask, render_template, redirect, url_for
+from flask import Flask, render_template, redirect, url_for, request
 from flask_bootstrap import Bootstrap
 from flask_wtf import FlaskForm
 from wtforms import StringField, SubmitField, SelectField, BooleanField
@@ -79,6 +79,26 @@ def delete(cafe_id):
     db.session.delete(cafe_to_delete)
     db.session.commit()
     return redirect(url_for('home'))
+
+
+@app.route('/edit/<int:cafe_id>', methods=["GET", "POST"])
+def edit(cafe_id):
+    form = CafeForm()
+    cafe_to_edit = Cafe.query.get(cafe_id)
+    if form.validate_on_submit():
+        cafe_to_edit = Cafe.query.get(cafe_id)
+        cafe_to_edit.name = form.name.data
+        cafe_to_edit.map_url = form.map_url.data
+        cafe_to_edit.img_url = form.img_url.data
+        cafe_to_edit.location = form.location.data
+        cafe_to_edit.has_sockets = form.has_sockets.data
+        cafe_to_edit.has_toilet = form.has_toilet.data
+        cafe_to_edit.can_take_calls = form.has_wifi.data
+        cafe_to_edit.seats = form.can_take_calls.data
+        cafe_to_edit.coffee_price = form.seats.data
+        db.session.commit()
+        return redirect(url_for('home'))
+    return render_template('edit.html', form=form)
 
 
 if __name__ == '__main__':
