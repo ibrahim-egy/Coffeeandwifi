@@ -85,22 +85,33 @@ def delete(cafe_id):
 
 @app.route('/edit/<int:cafe_id>', methods=["GET", "POST"])
 def edit(cafe_id):
-    form = CafeForm()
     cafe_to_edit = Cafe.query.get(cafe_id)
-    if form.validate_on_submit():
+    edit_form = CafeForm(
+        name=cafe_to_edit.name,
+        map_url=cafe_to_edit.map_url,
+        img_url=cafe_to_edit.img_url,
+        location=cafe_to_edit.location,
+        has_sockets=cafe_to_edit.has_sockets,
+        has_toilet=cafe_to_edit.has_toilet,
+        has_wifi=cafe_to_edit.has_wifi,
+        can_take_calls=cafe_to_edit.can_take_calls,
+        seats=cafe_to_edit.seats,
+        coffee_price=cafe_to_edit.coffee_price
+    )
+    if edit_form.validate_on_submit():
         cafe_to_edit = Cafe.query.get(cafe_id)
-        cafe_to_edit.name = form.name.data
-        cafe_to_edit.map_url = form.map_url.data
-        cafe_to_edit.img_url = form.img_url.data
-        cafe_to_edit.location = form.location.data
-        cafe_to_edit.has_sockets = form.has_sockets.data
-        cafe_to_edit.has_toilet = form.has_toilet.data
-        cafe_to_edit.can_take_calls = form.has_wifi.data
-        cafe_to_edit.seats = form.can_take_calls.data
-        cafe_to_edit.coffee_price = form.seats.data
+        cafe_to_edit.name = edit_form.name.data
+        cafe_to_edit.map_url = edit_form.map_url.data
+        cafe_to_edit.img_url = edit_form.img_url.data
+        cafe_to_edit.location = edit_form.location.data
+        cafe_to_edit.has_sockets = edit_form.has_sockets.data
+        cafe_to_edit.has_toilet = edit_form.has_toilet.data
+        cafe_to_edit.can_take_calls = edit_form.has_wifi.data
+        cafe_to_edit.seats = edit_form.can_take_calls.data
+        cafe_to_edit.coffee_price = edit_form.seats.data
         db.session.commit()
         return redirect(url_for('home'))
-    return render_template('edit.html', form=form)
+    return render_template('edit.html', form=edit_form)
 
 
 if __name__ == '__main__':
